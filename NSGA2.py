@@ -12,7 +12,7 @@ import os
 import matplotlib.patches as mpatches
 import numpy as np
 import pandas as pd
-import rasterio
+# import rasterio
 from matplotlib.font_manager import FontProperties
 from itertools import product
 from pymoo.algorithms.nsga2 import NSGA2
@@ -25,6 +25,9 @@ from pymoo.performance_indicator.hv import Hypervolume
 from pymoo.performance_indicator.igd import IGD
 
 from landuse import landuse_creator
+from comb import combination as combination_obj
+# from policy import policy
+from configs import model_vars as v
 
 
 directory = r"C:\Users\20180742\OneDrive - TU Eindhoven\Collaboration\Papers\04-Decision Support System\MOO algorithm scripts\Run Test"
@@ -49,250 +52,241 @@ directory = r"C:\Users\20180742\OneDrive - TU Eindhoven\Collaboration\Papers\04-
 # rev = np.vectorize(lambda x:not x)
 # landuse_mask_rev = rev(landuse_mask)
 
-lu = landuse_creator()
-landuse2d = lu.read2d_partial_random()
-landuse = lu.read()
+# lu = landuse_creator()
+# landuse2d = lu.read2d_partial_random()
+# landuse = lu.read()
+# cmb = combination_obj()
 
 # Variables:
-population = 4200
-vegetable_demand = 0.125 * population * 365
-agri_land_availability = 27000
-energy_land_availabilty = 140000
-electricity_demand = 43200000
-error_buffer = 0
-grid_lenght = 40
+# population = 4200
+# vegetable_demand = 0.125 * population * 365
+# agri_land_availability = 27000
+# energy_land_availabilty = 140000
+# electricity_demand = 43200000
+# error_buffer = 0
+# grid_lenght = 40
 # k = np.random.randint(low = 1, high = 19, size = landuse_size)
 # original_gridsize = k.shape
 # k = k.reshape(landuse2d.shape[0]*landuse2d.shape[1])
 
-policy_dict = {
-    'Urban gardening': 1,
-    'Limited land allocation for fodder crops': 2,
-    'Sustainable farming production system': 3,
-    'Draining garden design': 4,
-    'Rainwater harvesting': 5,
-    'On-site wastewater purification': 6,
-    'Solar power roofs': 7,
-    'Energy-saving households behavior': 8,
-    'Biomass efficiency improvement': 9,
-    'Wind power': 10
-    }
+# policy_dict = {
+#     'Urban gardening': 1,
+#     'Limited land allocation for fodder crops': 2,
+#     'Sustainable farming production system': 3,
+#     'Draining garden design': 4,
+#     'Rainwater harvesting': 5,
+#     'On-site wastewater purification': 6,
+#     'Solar power roofs': 7,
+#     'Energy-saving households behavior': 8,
+#     'Biomass efficiency improvement': 9,
+#     'Wind power': 10
+#     }
 
-landuse_dict = {
-    'N.A.': -1,
-    'Residential': 0,
-    'Industrial': 1,
-    'Commercial': 2,
-    'Green': 3
-    }
+# landuse_dict = {
+#     'N.A.': -1,
+#     'Residential': 0,
+#     'Commercial': 1,
+#     'Mixed-use': 2,
+#     'Green': 3
+#     }
 # landuse = np.array([[3,3,1,3],
 #                     [2,0,0,0],
 #                     [1,0,0,0],
 #                     [3,2,0,1]]).reshape(16)
 # landuse = np.random.choice(4, 700)
-def create_random_landuse():
-    landuse = np.random.choice(4, 700, p=[0.16, 0.11, 0.02, 0.71])
-    landuse2d = landuse.reshape(20,35)
-    return landuse, landuse2d
+
 
 
   
-combination = {
-    12: [1,3],
-    13: [1,4],
-    14: [2,3],
-    15: [2,3,9],
-    16: [5,6],
-    17: [5,6,7],
-    18: [7,8],
-    19: [5,6,7,8]
-    }
+# combination = {
+#     12: [1,3],
+#     13: [1,4],
+#     14: [2,3],
+#     15: [2,3,9],
+#     16: [5,6],
+#     17: [5,6,7],
+#     18: [7,8],
+#     19: [5,6,7,8]
+#     }
 
-def compat_combination(compatibility):
-    compatibility.columns = range(1, len(compatibility.columns)+1)
-    for key,value in combination.items():
-        z = compatibility[value[0]].copy()
-        for i in value[1:]: 
-            z *= compatibility[i]
-        compatibility[key] = z
-    return compatibility.values
+
    
-path = r"C:\Users\20180742\OneDrive - TU Eindhoven\Collaboration\Papers\04-Decision Support System\Data\Optimization Development Calculation\21.03.05_Optimization Development Calculations_M.Ghodsvali.xlsx" 
-compatibility = pd.read_excel(path, sheet_name='Compatibility', index_col=0)
-compatibility = compat_combination(compatibility)
-swap = np.vectorize(lambda x : int(not bool(x)))
-compatibility = swap(compatibility)
+# path = r"C:\Users\20180742\OneDrive - TU Eindhoven\Collaboration\Papers\04-Decision Support System\Data\Optimization Development Calculation\21.03.05_Optimization Development Calculations_M.Ghodsvali.xlsx" 
+# compatibility = pd.read_excel(path, sheet_name='Compatibility', index_col=0)
+# compatibility = compat_combination(compatibility)
+# swap = np.vectorize(lambda x : int(not bool(x)))
+# compatibility = swap(compatibility)
 
-distance = pd.read_excel(path, sheet_name= 'Distance', index_col=None, header = None)
 
-def distance_fill(distance):
-    distance.fillna('',inplace = True)
-    distance = distance.replace(landuse_dict)
-    distance.iloc[0,:] = distance.iloc[0,:].apply(lambda x: int(x.split('K')[-1]) if not x =='' else '')
-    distance.iloc[:,0] = distance.iloc[:,0].apply(lambda x: int(x.split('K')[-1]) if not x =='' else '')
-    distance = distance.set_index([0,1])
-    columns = pd.MultiIndex.from_arrays(distance.iloc[0:2].values)
-    distance = distance.iloc[2:]
-    distance.columns = columns
-    for index,row in distance.iterrows():
-        for col in distance.columns:
-            if not row[col] == '':
-                distance.loc[col,index] = row[col]
-    distance = distance.applymap(lambda x: x/grid_lenght)
-    for key, value in combination.items():
-        r = distance[value[0]]
-        for val in value[1:]:
-            tmp = distance[val]
-            if len(tmp.shape) == 1:
-                distance[(key,'')] = r.combine(distance[val], max)
-            else:
-                for col in range(distance[val].shape[1]):
-                    col_name = distance[val].columns[col]
-                    distance[(key,col_name)] = r.combine(distance[val].iloc[:,col], max)
-    for col in [x for x in distance.columns if x[0] in combination.keys()]:
-        distance.loc[col,:] = ''
-    for index, row in distance.iterrows():
-        for col in distance.columns:
-            if not row[col] == '':
-                distance.loc[col, index] = row[col]
-    for index in [x for x in distance.columns if x[0] in combination.keys()]:
-        for col in [x for x in distance.columns if x[0] in combination.keys()]:
-            combs = []
-            set1 = combination[index[0]]
-            set2 = combination[col[0]]
-            for s1 in set1:
-                for s2 in set2:
-                    tmp = distance.loc[[s1], [s2]]
-                    if tmp.shape == (1,1):
-                        combs.append(tmp.iloc[0,0])
-                    else:
-                        pref_index = index[1] if index[1] in tmp.index.get_level_values(1) else ''
-                        pref_col = col[1] if col[1] in tmp.columns.get_level_values(1) else ''
-                        combs.append(tmp.loc[(s1, pref_index),(s2, pref_col)])
-            res = max(combs)
-            distance.loc[index, col] = res
-    return distance
 
-distance = distance_fill(distance)
+# def distance_fill(distance):
+#     distance.fillna('',inplace = True)
+#     distance = distance.replace(lu.landuse_dict)
+#     distance.iloc[0,:] = distance.iloc[0,:].apply(lambda x: int(x.split('K')[-1]) if not x =='' else '')
+#     distance.iloc[:,0] = distance.iloc[:,0].apply(lambda x: int(x.split('K')[-1]) if not x =='' else '')
+#     distance = distance.set_index([0,1])
+#     columns = pd.MultiIndex.from_arrays(distance.iloc[0:2].values)
+#     distance = distance.iloc[2:]
+#     distance.columns = columns
+#     for index,row in distance.iterrows():
+#         for col in distance.columns:
+#             if not row[col] == '':
+#                 distance.loc[col,index] = row[col]
+#     distance = distance.applymap(lambda x: x/v.grid_lenght)
+#     for key, value in cmb.combination.items():
+#         r = distance[value[0]]
+#         for val in value[1:]:
+#             tmp = distance[val]
+#             if len(tmp.shape) == 1:
+#                 distance[(key,'')] = r.combine(distance[val], max)
+#             else:
+#                 for col in range(distance[val].shape[1]):
+#                     col_name = distance[val].columns[col]
+#                     distance[(key,col_name)] = r.combine(distance[val].iloc[:,col], max)
+#     for col in [x for x in distance.columns if x[0] in cmb.combination.keys()]:
+#         distance.loc[col,:] = ''
+#     for index, row in distance.iterrows():
+#         for col in distance.columns:
+#             if not row[col] == '':
+#                 distance.loc[col, index] = row[col]
+#     for index in [x for x in distance.columns if x[0] in cmb.combination.keys()]:
+#         for col in [x for x in distance.columns if x[0] in cmb.combination.keys()]:
+#             combs = []
+#             set1 = cmb.combination[index[0]]
+#             set2 = cmb.combination[col[0]]
+#             for s1 in set1:
+#                 for s2 in set2:
+#                     tmp = distance.loc[[s1], [s2]]
+#                     if tmp.shape == (1,1):
+#                         combs.append(tmp.iloc[0,0])
+#                     else:
+#                         pref_index = index[1] if index[1] in tmp.index.get_level_values(1) else ''
+#                         pref_col = col[1] if col[1] in tmp.columns.get_level_values(1) else ''
+#                         combs.append(tmp.loc[(s1, pref_index),(s2, pref_col)])
+#             res = max(combs)
+#             distance.loc[index, col] = res
+#     return distance
 
-def select_index(ind, k):
-    if ind[1] == '': # no landuse:
-        match = np.where(k == ind[0])
-        match = [*zip(match[0], match[1])]
-    else:
-        match1 = np.where(k == ind[0])
-        match2 = np.where(landuse2d ==  ind[1])
-        match = list(set([*zip(match1[0], match1[1])])&set([*zip(match2[0], match2[1])]))
-    return match
+# distance = distance_fill(distance)
 
-def pairwise_distance(matched_1, matched_2, min_dist):
-    dists = []
-    for x,y in matched_1:
-        for i,j in matched_2:
-            dist = np.sqrt((y-j)**2+(x-i)**2)
-            if dist >= min_dist:
-                dists.append(0)
-            else:
-                dists.append(1)
-    return sum(dists)
+# def select_index(ind, k):
+#     if ind[1] == '': # no landuse:
+#         match = np.where(k == ind[0])
+#         match = [*zip(match[0], match[1])]
+#     else:
+#         match1 = np.where(k == ind[0])
+#         match2 = np.where(landuse2d ==  ind[1])
+#         match = list(set([*zip(match1[0], match1[1])])&set([*zip(match2[0], match2[1])]))
+#     return match
 
-def calc_dist(points):
-    p1 = points[0]
-    p2 = points[1]
-    return np.sqrt((p1[1]-p2[1])**2+(p1[0]-p2[0])**2)
+# def pairwise_distance(matched_1, matched_2, min_dist):
+#     dists = []
+#     for x,y in matched_1:
+#         for i,j in matched_2:
+#             dist = np.sqrt((y-j)**2+(x-i)**2)
+#             if dist >= min_dist:
+#                 dists.append(0)
+#             else:
+#                 dists.append(1)
+#     return sum(dists)
 
-def pairwise_distance_2(matched_1, matched_2, min_dist):
-    prod = [*product(matched_1, matched_2)]
-    dists = np.array([*map(calc_dist, prod)])
-    dists = dists < min_dist
-    return dists.sum()
+# def calc_dist(points):
+#     p1 = points[0]
+#     p2 = points[1]
+#     return np.sqrt((p1[1]-p2[1])**2+(p1[0]-p2[0])**2)
+
+# def pairwise_distance_2(matched_1, matched_2, min_dist):
+#     prod = [*product(matched_1, matched_2)]
+#     dists = np.array([*map(calc_dist, prod)])
+#     dists = dists < min_dist
+#     return dists.sum()
                 
-def spatial_adjacency(k):
-    k = lu.make_2d(k)
-    res_dict = {}
-    for row in distance.index:
-        for column in distance.columns:
-            min_dist = distance.loc[row, column]
-            if not min_dist == 0:
-                matched_1 = select_index(row, k)
-                matched_2 = select_index(column, k)
-                res_dict[(row, column)] = pairwise_distance_2(matched_1, matched_2, min_dist)
-            else:
-                res_dict[(row, column)] = 0
-    res = sum(res_dict.values())
-    return res    
+# def spatial_adjacency(k):
+#     k = lu.make_2d(k)
+#     res_dict = {}
+#     for row in cmb.dist.index:
+#         for column in cmb.dist.columns:
+#             min_dist = cmb.dist.loc[row, column]
+#             if not min_dist == 0:
+#                 matched_1 = select_index(row, k)
+#                 matched_2 = select_index(column, k)
+#                 res_dict[(row, column)] = pairwise_distance_2(matched_1, matched_2, min_dist)
+#             else:
+#                 res_dict[(row, column)] = 0
+#     res = sum(res_dict.values())
+#     return res    
 
-def beta(k, landuse):
-    policy_6 = lambda a: 0.00016 * 365 * grid_lenght**2 if a == 0 else (
-            0.0024 * 365 * grid_lenght**2 if a == 2 else (
-            0.0006 * 365 * grid_lenght**2 if a == 1 else 1))
-    beta_dict={
-        1: 59.42 * grid_lenght**2,
-        2: 141658.60 * grid_lenght**2,
-        3: 0.00001 * grid_lenght,
-        4: 0,
-        5: 2.18 * grid_lenght**2,
-        6: policy_6(landuse),
-        # 7: 0.038 * grid_lenght**2,
-        7: 332.09 * grid_lenght**2, 
-        8: 0,
-        # 9: 2.19 * grid_lenght**2,
-        9: 19179.14 * grid_lenght**2,
-        # 10: 0.02 * grid_lenght**2,
-        10: 174.15 * grid_lenght**2,
-        11: 0
-        }
-    beta_dict = beta_combination(beta_dict)
-    out = beta_dict[k]
-    return out
+# def beta(k, landuse):
+#     policy_6 = lambda a: 0.00016 * 365 * v.grid_lenght**2 if a == 0 else (
+#             0.0024 * 365 * v.grid_lenght**2 if a == 2 else (
+#             0.0006 * 365 * v.grid_lenght**2 if a == 1 else 1))
+#     beta_dict={
+#         1: 59.42 * v.grid_lenght**2,
+#         2: 141658.60 * v.grid_lenght**2,
+#         3: 0.00001 * v.grid_lenght,
+#         4: 0,
+#         5: 2.18 * v.grid_lenght**2,
+#         6: policy_6(landuse),
+#         # 7: 0.038 * grid_lenght**2,
+#         7: 332.09 * v.grid_lenght**2, 
+#         8: 0,
+#         # 9: 2.19 * grid_lenght**2,
+#         9: 19179.14 * v.grid_lenght**2,
+#         # 10: 0.02 * grid_lenght**2,
+#         10: 174.15 * v.grid_lenght**2,
+#         11: 0
+#         }
+#     beta_dict = beta_combination(beta_dict)
+#     out = beta_dict[k]
+#     return out
 
-def beta_combination(beta_dict):
-    for key,value in combination.items():
-        beta_dict[key]=sum([*map(lambda x: beta_dict[x], value)])
-    return beta_dict
+# def beta_combination(beta_dict):
+#     for key,value in cmb.combination.items():
+#         beta_dict[key]=sum([*map(lambda x: beta_dict[x], value)])
+#     return beta_dict
 
-def beta_vec(k):
-    vec = np.vectorize(beta)
-    out = vec(k,landuse).sum()
-    return out
+# def beta_vec(k):
+#     vec = np.vectorize(beta)
+#     out = vec(k,landuse).sum()
+#     return out
 
-def alpha(k):
-    alpha_dict={
-        1: 0.086,
-        2: 0.035,
-        3: 0.093,
-        4: 0.080,
-        5: 0.119,
-        6: 0.052,
-        7: 0.264,
-        8: 0.278,
-        9: 0.048,
-        10: 0.026,
-        11: 0
-        }
-    alpha_dict = alpha_combination(alpha_dict)
-    max_alpha = max(alpha_dict.values())
-    out = max_alpha - alpha_dict[k]
-    return out
+# def alpha(k):
+#     alpha_dict={
+#         1: 0.086,
+#         2: 0.035,
+#         3: 0.093,
+#         4: 0.080,
+#         5: 0.119,
+#         6: 0.052,
+#         7: 0.264,
+#         8: 0.278,
+#         9: 0.048,
+#         10: 0.026,
+#         11: 0
+#         }
+#     alpha_dict = alpha_combination(alpha_dict)
+#     max_alpha = max(alpha_dict.values())
+#     out = max_alpha - alpha_dict[k]
+#     return out
 
-def alpha_combination(alpha_dict):
-    for key,value in combination.items():
-        alpha_dict[key]=np.prod([*map(lambda x: alpha_dict[x], value)])
-    return alpha_dict
+# def alpha_combination(alpha_dict):
+#     for key,value in cmb.combination.items():
+#         alpha_dict[key]=np.prod([*map(lambda x: alpha_dict[x], value)])
+#     return alpha_dict
         
-def alpha_vec(k):
-    vec = np.vectorize(alpha)
-    out = vec(k).sum()
-    return out
+# def alpha_vec(k):
+#     vec = np.vectorize(alpha)
+#     out = vec(k).sum()
+#     return out
 
-def compatibility_const(k, landuse):
-    out = compatibility[landuse, int(k-1)]
-    return out
+# def compatibility_const(k, landuse):
+#     out = cmb.compat[landuse, int(k-1)]
+#     return out
 
-def compatibility_const_vec(k):
-    vec = np.vectorize(compatibility_const)
-    out = vec(k, landuse).sum()
-    return out
+# def compatibility_const_vec(k):
+#     vec = np.vectorize(compatibility_const)
+#     out = vec(k, landuse).sum()
+#     return out
 
 # def consts_normalizer():
 #     res = []
@@ -343,7 +337,7 @@ class MyProblem(Problem):
                          n_obj=2,
                          n_constr=6,
                          xl=np.array([1]*landuse.shape[0]),
-                         xu=np.array([1]*landuse.shape[0])*max(combination.keys()),
+                         xu=np.array([1]*landuse.shape[0])*max(cmb.combination.keys()),
                          type_var=int,
                          elementwise_evaluation=True)
 
@@ -351,19 +345,19 @@ class MyProblem(Problem):
         f1 = beta_vec(x)/33225194484
         f2 = alpha_vec(x)/217
 
-        g1 = (compatibility_const_vec(x)/x.shape[0])/0.46 - error_buffer
+        g1 = (compatibility_const_vec(x)/x.shape[0])/0.46 - v.error_buffer
         g2 = -((np.count_nonzero(x == 1) + np.count_nonzero(x == 12) + np.count_nonzero(x == 13)) \
-                * grid_lenght**2 * 25 - vegetable_demand)/6587655 - error_buffer
+                * v.grid_lenght**2 * 25 - v.vegetable_demand)/6587655 - v.error_buffer
         g3 = ((np.count_nonzero(x == 1) + np.count_nonzero(x == 2) + np.count_nonzero(x == 12) \
                 + np.count_nonzero(x == 13) + np.count_nonzero(x == 14) + np.count_nonzero(x == 15)) \
-              * grid_lenght**2 - agri_land_availability)/514949 - error_buffer
-        g4 = spatial_adjacency(x)/167796 - error_buffer
+              * v.grid_lenght**2 - v.agri_land_availability)/514949 - v.error_buffer
+        g4 = spatial_adjacency(x)/167796 - v.error_buffer
         g5 = ((np.count_nonzero(x == 7) + np.count_nonzero(x == 9) + np.count_nonzero(x == 10) \
                 + np.count_nonzero(x == 15) + np.count_nonzero(x == 17) + np.count_nonzero(x == 18) \
-                    + np.count_nonzero(x == 19)) * grid_lenght**2 - energy_land_availabilty)/404256 - error_buffer
+                    + np.count_nonzero(x == 19)) * v.grid_lenght**2 - v.energy_land_availabilty)/404256 - v.error_buffer
         g6 = -(((((np.count_nonzero(x == 7) + np.count_nonzero(x == 17) + np.count_nonzero(x == 18) + np.count_nonzero(x == 19)) * 0.017) \
                 + ((np.count_nonzero(x == 9) + np.count_nonzero(x == 15)) * 0.41) + (np.count_nonzero(x == 10) * 0.014)) \
-                    * grid_lenght**2 * 24* 365) - electricity_demand)/654105839 - error_buffer
+                    * v.grid_lenght**2 * 24* 365) - v.electricity_demand)/654105839 - v.error_buffer
 
         out["F"] = [f1, f2]
         out["G"] = [g1, g2, g3, g4, g5, g6]
@@ -395,7 +389,7 @@ res = minimize(problem,
                save_history=True)
 
 # Result file name
-file_name = 'NSGA_II_test run_g1-3-4-5 pop%s gen%s errorbuffer%s' %(algorithm.pop_size, res.history[-1].n_gen, error_buffer)
+file_name = 'NSGA_II_test run_g1-3-4-5 pop%s gen%s errorbuffer%s' %(algorithm.pop_size, res.history[-1].n_gen, v.error_buffer)
 
 # Convergence
 n_evals = []    # corresponding number of function evaluations\
@@ -480,10 +474,10 @@ else:
 res_X_vect = np.vectorize(lambda x: int(x) if not int(x) in [-1,11] else '')
 res_X = res_X_vect(res_X)
 values = np.unique(landuse2d.ravel())
-landuse_dict_reverse = {v:k for k,v in landuse_dict.items()}
+landuse_dict_reverse = {v:k for k,v in lu.landuse_dict.items()}
 fig = plt.figure()
 im = plt.imshow(landuse2d, interpolation='none')
-labels = list(landuse_dict.keys())
+labels = list(lu.landuse_dict.keys())
 colors = [ im.cmap(im.norm(value)) for value in values]
 patches = [ mpatches.Patch(color=colors[i], label=labels[i]) for i in range(len(values)) ]
 plt.legend(bbox_to_anchor=(1.05,1), handles= patches, borderaxespad=0., loc=2, prop={'size':6})

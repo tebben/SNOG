@@ -25,4 +25,6 @@ class model_vars:
     df = pd.read_excel(p, sheet_name = sheets.configs, header = None)
     ks, vs = extract_vars(df)
     for k,v in zip(ks, vs):
+        if k == 'vegetable_demand':
+            v = v*population
         exec("%s = %s" %(k, str(v)))
