@@ -34,27 +34,27 @@ class model:
                              n_obj=2,
                              n_constr=6,
                              xl=np.array([1]*self.parent.landuse.shape[0]),
-                             xu=np.array([1]*self.parent.landuse.shape[0])*max(self.parent.cmb.combination.keys()),
+                             xu=np.array([1]*self.parent.landuse.shape[0])*max(self.parent.cmb.trans.keys()),
                              type_var=int,
                              elementwise_evaluation=True)
     
         def _evaluate(self, x, out, *args, **kwargs):
-            f1 = self.parent.F1(x)
-            f2 = self.parent.F2(x)
-            g1 = self.parent.G1(x)
-            g2 = self.parent.G2(x)
-            g3 = self.parent.G3(x)
-            g4 = self.parent.G4(x)
-            g5 = self.parent.G5(x)
-            g6 = self.parent.G6(x)
+            f1 = self.parent.F1(self.parent.translator(x))
+            f2 = self.parent.F2(self.parent.translator(x))
+            g1 = self.parent.G1(self.parent.translator(x))
+            g2 = self.parent.G2(self.parent.translator(x))
+            g3 = self.parent.G3(self.parent.translator(x))
+            g4 = self.parent.G4(self.parent.translator(x))
+            g5 = self.parent.G5(self.parent.translator(x))
+            g6 = self.parent.G6(self.parent.translator(x))
     
             out["F"] = [f1, f2]
             out["G"] = [g1, g2, g3, g4, g5, g6]
     
-    def __init__(self, pop_size = 100, norm = False, filename_suffix = ''):
+    def __init__(self, scenario, pop_size = 100, norm = False, filename_suffix = ''):
         self.pop_size = pop_size
         self.filename_suffix = filename_suffix
-        self.clc = consts_objs(norm = norm)
+        self.clc = consts_objs(scenario, norm = norm)
         
     def run(self):
         self.problem = self.FWE(self.clc)
@@ -135,13 +135,13 @@ class model:
     def get_res_X(self):
         if self.res.X is None: 
             print('Warning: res.X is None')
-            self.res_X = self.clc.lu.make_2d(self.res.history[-1].opt[0].X)
-            self.res_X_all = self.res.history[-1].opt[0].X
-            self.res_X_best = self.res_X_all
+            self.res_X = self.clc.translator(self.clc.lu.make_2d(self.res.history[-1].opt[0].X))
+            self.res_X_all = self.clc.translator(self.res.history[-1].opt[0].X)
+            self.res_X_best = self.clc.translator(self.res_X_all)
         else: 
-            self.res_X = self.clc.lu.make_2d(self.res.X[self.best_F])
-            self.res_X_all = self.res.X
-            self.res_X_best = self.res_X[self.best_F]
+            self.res_X = self.clc.translator(self.clc.lu.make_2d(self.res.X[self.best_F]))
+            self.res_X_all = self.clc.translator(self.res.X)
+            self.res_X_best = self.clc.translator(self.res_X[self.best_F])
             
     def get_res_G(self):
         if self.res.G is None:

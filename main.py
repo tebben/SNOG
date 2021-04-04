@@ -7,11 +7,15 @@ Created on Mon Mar 29 19:02:56 2021
 
 from model import model
 
-pop_size = 100
-norm = True
+scenario = 1
+pop_size = 10
+norm = False
 filename_suffix = ''
 
-nsga2 = model(pop_size, norm, filename_suffix)
+# Initialize the Model
+nsga2 = model(scenario, pop_size, norm, filename_suffix)
+
+# Run
 nsga2.run()
 
 # Results

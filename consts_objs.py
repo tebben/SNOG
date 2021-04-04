@@ -14,9 +14,9 @@ from comb import combination as combination_obj
 from itertools import product
 
 class consts_objs:
-    def __init__(self, norm: bool = False):
-        self.iter = 10 # iterations to normalize values
-        self.cmb = combination_obj()
+    def __init__(self, scenario, norm: bool = False):
+        self.iter = 500 # iterations to normalize values
+        self.cmb = combination_obj(scenario)
         self.lu = landuse_creator()
         self.landuse2d = self.lu.read2d_partial_random()
         self.landuse = self.lu.read()
@@ -25,6 +25,7 @@ class consts_objs:
         self.max_alpha = max(self.cmb.alpha_dict.values())
         self.alpha_vec()
         self.normalize(norm) # read normalized values or perform normalization
+        self.translate()
     
     def normalize(self, norm):
         if not norm:
@@ -54,7 +55,15 @@ class consts_objs:
         self.norm = dotdict(self.norm)
             
     def get_random_k(self):
-        return np.random.randint(low = 1, high = max(self.cmb.combination.keys()), size = self.lu.landuse.shape)
+        k = np.random.randint(low = 1, high = max(self.cmb.trans.keys())+1, size = self.lu.landuse.shape)
+        k = self.translator(k)
+        return k
+    
+    def translate(self):
+        self.translate = np.vectorize(lambda x: self.cmb.trans[x])
+    
+    def translator(self, k):
+        return self.translate(k)
     
     def normalizer_consts(self):
         res = []
@@ -65,7 +74,7 @@ class consts_objs:
         print()
         means = []
         for i in range(len(res[0])):
-            means.append(np.mean([a[i] for a in res]))
+            means.append(round(np.mean([a[i] for a in res])))
         return means
         
     def normalizer_obj(self):
@@ -77,7 +86,7 @@ class consts_objs:
         print()
         means = []
         for i in range(len(res[0])):
-            means.append(np.mean([a[i] for a in res]))
+            means.append(round(np.mean([a[i] for a in res])))
         return means
     
     def calc_beta(self, k):
