@@ -151,7 +151,7 @@ class model:
             self.res_G = self.res.G[self.best_F]
             
     def define_file_name(self):
-        self.filename = f'NSGA_II_pop{self.pop_size}_gen{self.res.history[-1].n_gen}_errorbuffer{v.error_buffer}{self.filename_suffix}'
+        self.filename = f'NSGA_II_{self.clc.cmb.scenario}_pop{self.pop_size}_gen{self.res.history[-1].n_gen}_errorbuffer{v.error_buffer}{self.filename_suffix}'
         
     def print_out(self, filename):
         print(f'file "{filename}" has been saved')

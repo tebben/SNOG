@@ -7,7 +7,7 @@ Created on Mon Mar 29 19:02:56 2021
 
 from model import model
 
-scenario = 1
+scenario = 0
 pop_size = 10
 norm = False
 filename_suffix = ''
