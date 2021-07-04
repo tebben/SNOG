@@ -42,3 +42,19 @@ def alpha():
         11: 0
         }
     return alpha_dict
+
+def climate_stress_control():
+    climate_dict = {
+        1: 75 * v.grid_lenght**2,
+        2: 14.4 * v.grid_lenght**2,
+        3: 0.08 * v.grid_lenght**2,
+        4: 0.0122 * v.grid_lenght**2,
+        5: 5.09 * v.grid_lenght**2,
+        6: 0.0122 * v.grid_lenght**2,
+        7: 17.52 * v.grid_lenght**2,
+        8: 21.87 * v.grid_lenght**2,
+        9: 15.7 * v.grid_lenght**2,
+        10: 14.89 * v.grid_lenght**2,
+        11: 0
+        }
+    return climate_dict

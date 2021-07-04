@@ -10,7 +10,7 @@ import pandas as pd
 import numpy as np
 from compat import compatibility as compat
 from dist import distance as dist
-from objs import alpha, beta
+from objs import alpha, beta, climate_stress_control
 from policy import policy
 
 class combination:
@@ -26,6 +26,7 @@ class combination:
         # self.adj4scenario_distance()
         self.alpha_combination()
         self.beta_combination()
+        self.climate_combination()
         
     def select_scenario(self):
         try:
@@ -55,7 +56,7 @@ class combination:
     
     def manual_changes_compatibility(self, compatibility):
         compatibility.loc[:, 3] = 0 # K3 only valid in combination with K1 or K2
-        compatibility.loc[['M','C','G'], 4] = 0 # K4 for M, C and G is valid only in combination with 1
+        compatibility.loc[['M','C','G'], 4] = 0 # K4 for M, C and G is valid only in combination with K1
         compatibility.loc[:, 9] = 0 # K9 only valid in combination with K1 or K2
         return compatibility
     
@@ -63,7 +64,7 @@ class combination:
         self.compat = self.compat[:,self.valids]
     
     def adj4scenario_combination(self):
-        self.combination = {k:v for k,v in self.combination.items() if any(x in self.scenario[1].values() for x in v)}
+        self.combination = {k:v for k,v in self.combination.items() if all(x in self.scenario[1].values() for x in v)}
         m = max(self.scenario[1].keys())
         comb_dict = list(self.combination.items())
         comb_dict = [list(x) for x in comb_dict]
@@ -82,7 +83,7 @@ class combination:
     def alpha_combination(self):
         self.alpha_dict = alpha()
         for key,value in self.combination.items():
-            self.alpha_dict[key]=np.prod([*map(lambda x: self.alpha_dict[x], value)])
+            self.alpha_dict[key]=sum([*map(lambda x: self.alpha_dict[x], value)])
 
     def beta_combination(self):
         self.beta_dict = beta()
@@ -91,6 +92,11 @@ class combination:
         for key,value in self.combination.items():
             self.beta_dict[key]=[*map(lambda x: self.beta_dict[x][0], value)]
         
+    def climate_combination(self):
+        self.climate_dict = climate_stress_control()
+        for key,value in self.combination.items():
+            self.climate_dict[key]=sum([*map(lambda x: self.climate_dict[x], value)])
+    
     def distance_combination(self):
         distance = dist().distance
         for key, value in self.combination.items():

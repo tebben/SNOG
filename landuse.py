@@ -19,6 +19,21 @@ class landuse_creator:
         df = pd.read_excel(path.path_to_meta, sheet_name = sheets.landuse_dict, header=None).T
         self.landuse_dict = {df.iloc[0,i]: int(df.iloc[1,i]) for i in range(len(df.columns))}
     
+    def read2d(self):
+        p = path.path_to_landuse
+        raster = rasterio.open(p)
+        raster = raster.read(1)
+        val_convert = np.vectorize(lambda x: -1 if x in [255] else x)
+        raster = val_convert(raster)
+        # raster_flat = raster.reshape(raster.shape[0]*raster.shape[1])
+        # mask = raster_flat==1
+        # other = np.random.choice(len(self.random_proportion), np.sum(mask), p=self.random_proportion)
+        # raster_flat[mask] = other
+        self.landuse2d = raster
+        self.landuse_size = (self.landuse2d.shape[0], self.landuse2d.shape[1])
+        self.landuse_mask = self.landuse2d!=-1
+        return raster
+    
     def read2d_partial_random(self):
         p = path.path_to_landuse
         raster = rasterio.open(p)
@@ -38,7 +53,7 @@ class landuse_creator:
         try:
             self.landuse_mask
         except:
-            self.read2d_partial_random()
+            self.read2d()
         self.landuse = self.landuse2d.reshape(self.landuse2d.shape[0]*self.landuse2d.shape[1])
         self.landuse = self.landuse[self.landuse!=-1]
         rev = np.vectorize(lambda x:not x)

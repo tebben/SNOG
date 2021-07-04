@@ -18,14 +18,15 @@ class consts_objs:
         self.iter = 500 # iterations to normalize values
         self.cmb = combination_obj(scenario)
         self.lu = landuse_creator()
-        self.landuse2d = self.lu.read2d_partial_random()
+        self.landuse2d = self.lu.read2d()
         self.landuse = self.lu.read()
         self.compatibility_const_vec() # create func needed for G1
         self.beta_vec()
         self.max_alpha = max(self.cmb.alpha_dict.values())
         self.alpha_vec()
+        self.climate_vec()
+        self.translation()
         self.normalize(norm) # read normalized values or perform normalization
-        self.translate()
     
     def normalize(self, norm):
         if not norm:
@@ -59,7 +60,7 @@ class consts_objs:
         k = self.translator(k)
         return k
     
-    def translate(self):
+    def translation(self):
         self.translate = np.vectorize(lambda x: self.cmb.trans[x])
     
     def translator(self, k):
@@ -106,6 +107,12 @@ class consts_objs:
     
     def alpha_base(self, k):
         return self.max_alpha - self.cmb.alpha_dict[k]
+    
+    def climate_vec(self):
+        self.climate_func = np.vectorize(lambda k: self.cmb.climate_dict[k])
+        
+    def calc_climate(self, k):
+        return self.climate_func(k).sum()
     
     def compatibility_const(self, k, landuse):
         out = self.cmb.compat[landuse, int(k-1)]
@@ -189,6 +196,9 @@ class consts_objs:
         
     def F2(self, k):
         return self.calc_alpha(k)/self.norm.f2
+    
+    def CLIMATE_STRESS_CONTROL(self, k):
+        return self.calc_climate(k)
         
 class dotdict(dict):
     """dot.notation access to dictionary attributes"""
