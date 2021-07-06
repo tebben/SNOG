@@ -9,7 +9,7 @@ The presented tool can:
 
 Through the model, decision-makers are provided with choices of adjustable technological, environmental, and social policies to develop and validate various possible scenarios for the nexus process. Policies can be assigned in combination or individually to a location of desire, and possible implications in socio-ecological systems performance can be discussed simultaneously. Thus, optimal choices of nexus policies considering future implications can be made, along with a spatially validated action plan.
 
-The model is developed based on a modified version of Non-dominated Sortng Genetic Algorith-II (NSGA-II) using Pymoo.
+The model is developed based on a modified version of Non-dominated Sortng Genetic Algorith-II (NSGA-II) using [Pymoo](https://pymoo.org/index.html).
 
 **Usage**
 
