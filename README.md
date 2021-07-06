@@ -1,4 +1,4 @@
-# Multi-objective Spatial Optimization of Food-Water-Energy Nexus in Python  
+# Spatial Multi-objective Optimization of Food-Water-Energy Nexus in Python  
 
 The Spatial Nexus Optimization model is proposed as a frame of reference aiming to address the assessment of fundamental requirements for a balanced nexus system combined with a number of particular policy actions on social and environmental implications of uncontrolled resource use. 
 The presented tool can: 
@@ -13,8 +13,13 @@ The model is developed based on a modified version of Non-dominated Sortng Genet
 
 **Usage**
 
+```
+from model import model
+from optimized import optimized
+```
 
-Run main.py to run the model with pre-defined parameters.
+
 
 **Citation**
+
 We are currently working on a journal publication for the developed spatial nexus optimization model. Meanwhile, if you have used our framework for research purposes, please cite us with:
