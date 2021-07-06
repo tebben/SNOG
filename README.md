@@ -1,6 +1,4 @@
-# An Integrated Food-Water-Energy Nexus Decision-Support Model: Multi-objective Spatial Optimization in Python  
-
-**Author: Maryam Ghodsvali**
+# Multi-objective Spatial Optimization of Food-Water-Energy Nexus in Python  
 
 The Spatial Nexus Optimization model is proposed as a frame of reference aiming to address the assessment of fundamental requirements for a balanced nexus system combined with a number of particular policy actions on social and environmental implications of uncontrolled resource use. 
 The presented tool can: 
