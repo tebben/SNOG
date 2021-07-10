@@ -89,6 +89,8 @@ g4 = clc.G4(k)
 g5 = clc.G5(k)
 g6 = clc.G6(k)
 climate_stress_control = clc.CLIMATE_STRESS_CONTROL(k)
+nexus_resilience = clc.NEXUS_RESILIENCE(k)
+social_ecological_integrity = clc.SOCIAL_ECOLOGICAL_INTEGRITY(k)
 ```
 
 
