@@ -40,6 +40,7 @@ The policy map - k - with the above specification should be an input from the us
 k = lu.make_2d(clc.get_random_k())
 ```
 For any not-applicable cell we use -1, and that means the cell is out of the lanuse boundary.
+
 Values within policy_range are the policies for each cell in three categories:
 - 1 to 10: Base policies.
 - 11: Neutral policy
@@ -57,6 +58,7 @@ Base policies are the actual policies. Combined policies are combinations of two
 - 19	5,6,7,8
 
 Choosing any other combination considers invalid.
+
 Policy 11 is called Neutral policy and that basically means no policy for the specific cell. Therefore, any cell without policy should be coded as 11.
 
 It is also possible to load the pre-trained optimized policy map for the case study.
