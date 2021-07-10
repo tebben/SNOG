@@ -46,7 +46,7 @@ Values within policy_range are the policies for each cell in three categories:
 - 11: Neutral policy
 - 12 to max(policy_range): Combined policies.
 
-Base policies are the actual policies. Combined policies are combinations of two or more Base policies. For example, the use might choose policy 1 and 3 for a cell, but the cell should be coded as 12. Here are the possible policy combinations for the default scenario:
+Base policies are the actual policies. Combined policies are combinations of two or more Base policies. For example, the user might choose policy 1 and 3 for a cell, but the cell should be coded as 12. Here are the possible policy combinations for the default scenario:
 
 | Coded value | Actual policy combination |
 | ------ | ------ |
@@ -93,6 +93,11 @@ climate_stress_control = clc.CLIMATE_STRESS_CONTROL(k)
 
 
 
-**Citation**
+**Contact**
 
-We are currently working on a journal publication for the developed spatial nexus optimization model. Meanwhile, if you have used our framework for research purposes, please cite us with:
+Feel free to contact me if you have any question:
+
+Maryam Ghodsvali (m.ghodsvali [at] tue.nl)
+Eindhoven University of Technology
+Built Environment Department
+Eindhoven, The Netherlands
