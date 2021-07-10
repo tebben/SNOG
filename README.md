@@ -12,6 +12,7 @@ Through the model, decision-makers are provided with choices of adjustable techn
 The model is developed based on a modified version of Non-dominated Sortng Genetic Algorith-II (NSGA-II) using [Pymoo](https://pymoo.org/index.html).
 
 **Calculating propeties for a given policy map**
+
 The model can accomodate any land use, train the optimized policy map, and calculate relevant properties. But our aim here is to show how the default land use (i.e., case study of this research) can be loaded and the pproperties can be calculated.
 
 First we import the model and load it with default parameters. The model contains various objects, so we assign them to different variables for convinience.
