@@ -11,7 +11,7 @@ Through the model, decision-makers are provided with choices of adjustable techn
 
 The model is developed based on a modified version of Non-dominated Sortng Genetic Algorith-II (NSGA-II) using [Pymoo](https://pymoo.org/index.html).
 
-**Usage**
+**Use the pre-trained model to calculate properties**
 
 ```
 from model import model
