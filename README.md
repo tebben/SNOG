@@ -48,14 +48,16 @@ Values within policy_range are the policies for each cell in three categories:
 
 Base policies are the actual policies. Combined policies are combinations of two or more Base policies. For example, the use might choose policy 1 and 3 for a cell, but the cell should be coded as 12. Here are the possible policy combinations for the default scenario:
 
-- 12	1,3
-- 13	1,4
-- 14	2,3
-- 15	2,3,9
-- 16	5,6
-- 17	5,6,7
-- 18	7,8
-- 19	5,6,7,8
+| Coded value | Actual policy combination |
+| ------ | ------ |
+| 12 | 1, 3 |
+| 13 | 1, 4 |
+| 14 | 2, 3 |
+| 15 | 2, 3, 9 |
+| 16 | 5, 6 |
+| 17 | 5, 6, 7 |
+| 18 | 7, 8 |
+| 19 | 5, 6, 7, 8 |
 
 Choosing any other combination considers invalid.
 
