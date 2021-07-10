@@ -27,7 +27,7 @@ lu = clc.lu
 ```
 
 The landuse map is a numpy array. You need to provide a policy map - an array with the same shape - to be able to calculate the properties.
-Policy map should contain integer values with a certain range. You can derive the shape and range of values for the policy map as below.
+Policy map should contain integer values with a certain range. You can derive the shape and the range of values for the policy map as below.
 
 ```
 policy_shape = lu.landuse_shape
