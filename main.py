@@ -7,7 +7,7 @@ Created on Mon Mar 29 19:02:56 2021
 
 from model import model
 
-scenario = 4
+scenario = 0
 pop_size = 700
 norm = True
 filename_suffix = '_Edited_WeightedCompat'

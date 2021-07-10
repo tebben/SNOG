@@ -11,22 +11,21 @@ from optimized import optimized
 # Initialize the Model
 crt = model()
 clc = crt.clc
-cmb = crt.clc.cmb
-lu = crt.clc.lu
+cmb = clc.cmb
+lu = clc.lu
 
-# Provide the policy map k: numpy.array of shape lu.landuse2d.shape
-# Array should contains integers. Range of values should be (1, max(cmb.trans.keys())+1)
+# Provide the policy map k: numpy.array of shape lu.landuse_shape
+# Array should contains integers. Range of values should be cmb.policy_range
 # Here we provide an array with random numbers
 k = lu.make_2d(clc.get_random_k())
 
 # We can also get the optimized policy map
-optimized_k = optimized().read()
+k = optimized().read()
 
 # The mask should be used to filter out the irrelevant cells
 k = k[lu.landuse_mask]
 
 # Now the following proprties can be calculated.
-# All expecting a 1-D array of shape lu.landuse.shape as input
 f1 = clc.F1(k)
 f2 = clc.F2(k)
 g1 = clc.G1(k)
@@ -36,3 +35,5 @@ g4 = clc.G4(k)
 g5 = clc.G5(k)
 g6 = clc.G6(k)
 climate_stress_control = clc.CLIMATE_STRESS_CONTROL(k)
+nexus_resilience = clc.NEXUS_RESILIENCE(k)
+social_ecological_integrity = clc.SOCIAL_ECOLOGICAL_INTEGRITY(k)

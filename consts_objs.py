@@ -198,7 +198,13 @@ class consts_objs:
         return self.calc_alpha(k)/self.norm.f2
     
     def CLIMATE_STRESS_CONTROL(self, k):
-        return self.calc_climate(k)
+        return self.calc_climate(k)/1000000
+    
+    def NEXUS_RESILIENCE(self, k):
+        return - (self.F1(k) + self.F2(k))
+    
+    def SOCIAL_ECOLOGICAL_INTEGRITY(self, k):
+        return - (self.G1(k) + self.G2(k) + self.G3(k) + self.G4(k) + self.G5(k) + self.G6(k))
         
 class dotdict(dict):
     """dot.notation access to dictionary attributes"""

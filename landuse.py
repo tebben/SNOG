@@ -69,6 +69,10 @@ class landuse_creator:
         landuse2d[self.landuse_mask_rev] = -1
         return landuse2d
     
+    @property
+    def landuse_shape(self):
+        return self.landuse2d.shape
+    
 # def create_random_landuse():
 #     landuse = np.random.choice(4, 700, p=[0.16, 0.11, 0.02, 0.71])
 #     landuse2d = landuse.reshape(20,35)

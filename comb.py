@@ -138,3 +138,7 @@ class combination:
     
     def policy_comb(self):
         self.scenarios = policy().scenarios
+        
+    @property
+    def policy_range(self):
+        return range(1, max(self.trans.keys())+1)
