@@ -9,17 +9,20 @@ from set_path import path, sheets
 import pandas as pd
 import numpy as np
 from compat import compatibility as compat
+from landuse import landuse_creator
 from dist import distance as dist
 from objs import alpha, beta, climate_stress_control
 from policy import policy
 
 class combination:
     def __init__(self, scenario):
+        self.lu = landuse_creator()
         self.scenario = scenario
         self.policy_comb()
         self.select_scenario()
         self.read_combination()
         self.compat_combination()
+        self.compat_dataframe()
         self.distance_combination()
         self.adj4scenario_combination() # Update scenario and combination with combined policies
         # self.adj4scenario_compatibility()
@@ -53,6 +56,14 @@ class combination:
         swap = np.vectorize(lambda x : int(not bool(x)))
         compatibility = swap(compatibility)
         self.compat = compatibility
+        
+    def compat_dataframe(self):
+        cols = list(range(1, self.compat.shape[1]+1))
+        rows = list(self.lu.landuse_dict.keys())
+        rows = [x for x in rows if not x =='N.A.']
+        df = pd.DataFrame(self.compat, columns = cols, index=rows)
+        df = df.replace(1,2).replace(0,1).replace(2,0)
+        self.compat_df = df
     
     def manual_changes_compatibility(self, compatibility):
         compatibility.loc[:, 3] = 0 # K3 only valid in combination with K1 or K2

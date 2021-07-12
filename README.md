@@ -93,7 +93,15 @@ nexus_resilience = clc.NEXUS_RESILIENCE(k)
 social_ecological_integrity = clc.SOCIAL_ECOLOGICAL_INTEGRITY(k)
 ```
 
+**Invalid user policy choice**
 
+Some policies are not compatible with some types of landuse. To see what are the compatible policies for each landuse, the following method can be called.
+
+The result is a pandas.DataFrame. The index are the landuse types and the columns are the policies. 1 indicates that the policy is compatible with the landuse.
+
+```
+compatibility_metrix = cmb.compat_df
+```
 
 **Contact**
 
