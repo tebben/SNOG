@@ -110,14 +110,14 @@ k = k[lu.landuse_mask]
 Now that we have the policy map ready, we can calculate the following properties:
 
 ```
-f1 = clc.F1(k)
-f2 = clc.F2(k)
-g1 = clc.G1(k)
-g2 = clc.G2(k)
-g3 = clc.G3(k)
-g4 = clc.G4(k)
-g5 = clc.G5(k)
-g6 = clc.G6(k)
+f1 = clc.F1(k) # Objective 1
+f2 = clc.F2(k) # Objective 2
+g1 = clc.G1(k) # Constraint 1
+g2 = clc.G2(k) # Constraint 2
+g3 = clc.G3(k) # Constraint 3
+g4 = clc.G4(k) # Constraint 4
+g5 = clc.G5(k) # Constraint 5
+g6 = clc.G6(k) # Constraint 6
 climate_stress_control = clc.CLIMATE_STRESS_CONTROL(k)
 nexus_resilience = clc.NEXUS_RESILIENCE(k)
 social_ecological_integrity = clc.SOCIAL_ECOLOGICAL_INTEGRITY(k)
