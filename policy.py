@@ -12,6 +12,7 @@ class policy:
     def __init__(self):
         self.read_policy_dict()
         self.read_policy_comb()
+        self.read_policy_characters()
     
     def read_policy_dict(self):
         df = pd.read_excel(path.path_to_meta, sheet_name = sheets.policy_dict, header=None).T
@@ -21,3 +22,6 @@ class policy:
         df = pd.read_excel(path.path_to_meta, sheet_name = sheets.policy_comb, skiprows=1).iloc[:,2:]
         self.scenarios = [(s.strip(), {index+1:x+1 for index,x in enumerate(df[df[s] == 1].index.tolist())}) for s in df.columns]
         
+    def read_policy_characters(self):
+        df = pd.read_excel(path.path_to_meta, sheet_name = sheets.policy_charateristics, index_col = 0)
+        self.policy_characteristics = df

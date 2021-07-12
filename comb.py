@@ -59,8 +59,8 @@ class combination:
         
     def compat_dataframe(self):
         cols = list(range(1, self.compat.shape[1]+1))
-        rows = list(self.lu.landuse_dict.keys())
-        rows = [x for x in rows if not x =='N.A.']
+        rows = list(self.lu.landuse_dict.values())
+        rows = [x for x in rows if not x ==-1]
         df = pd.DataFrame(self.compat, columns = cols, index=rows)
         df = df.replace(1,2).replace(0,1).replace(2,0)
         self.compat_df = df

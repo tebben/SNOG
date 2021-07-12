@@ -20,13 +20,33 @@ First we import the model and load it with default parameters. The model contain
 ```
 from model import model
 
-crt = model()
-clc = crt.clc
-cmb = clc.cmb
-lu = clc.lu
+snog = model() # main model module
+clc = snog.clc # module to calculate the properties
+cmb = clc.cmb # module that provides support for the calculation of optimization parameters for all possible combinations of policies
+lu = clc.lu # module containing the land-use information
 ```
 
-The landuse map is a numpy array. You need to provide a policy map - an array with the same shape - to be able to calculate the properties.
+The landuse map is a 2-dimensional numpy array. We can read the current landuse as follows:
+
+```
+landuse_map = lu.landuse2d
+```
+
+We coded Null (not applicable) cells as -1.
+
+We can read the landuse legend in a dictionary as follows:
+
+```
+landuse_legend = lu.landuse_dict
+```
+
+We can also read the landuse in a 1-dimensional array excluding -1 values.
+
+```
+landuse_flat = lu.landuse
+```
+
+You need to provide a policy map - an array with the same shape as the 2-dimensional landuse - to be able to calculate the properties.
 Policy map should contain integer values with a certain range. You can derive the shape and the range of values for the policy map as below.
 
 ```
@@ -46,7 +66,17 @@ Values within policy_range are the policies for each cell in three categories:
 - 11: Neutral policy
 - 12 to max(policy_range): Combined policies.
 
-Base policies are the actual policies. Combined policies are combinations of two or more Base policies. For example, the user might choose policy 1 and 3 for a cell, but the cell should be coded as 12. Here are the possible policy combinations for the default scenario:
+Base policies are the actual policies. To derive names and the characteristics of the Base policies, we can call the following methods.
+
+```
+from policy import policy
+
+pl = policy() # initializing the policy object
+policy_legend = pl.policy_dict # read the name of the Base policies in a dictionary
+policy_characteristics = pl.policy_characteristics # read the policy characteristics in a pandas dataframe. Index are the policies and columns are the characteristics.
+```
+
+Combined policies are combinations of two or more Base policies. For example, the user might choose policy 1 and 3 for a cell, but the cell should be coded as 12. Here are the possible policy combinations for the default scenario:
 
 | Coded value | Actual policy combination |
 | ------ | ------ |
@@ -108,6 +138,7 @@ compatibility_metrix = cmb.compat_df
 Feel free to contact me if you have any question:
 
 Maryam Ghodsvali (m.ghodsvali [at] tue.nl)
+
 Eindhoven University of Technology
 Built Environment Department
 Eindhoven, The Netherlands

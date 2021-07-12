@@ -26,3 +26,4 @@ class sheets:
     res_x_best = 'res_X_Best'
     landuse = 'Landuse'
     res_g = 'res_G'
+    policy_charateristics = 'Policies charateristics'

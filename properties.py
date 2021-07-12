@@ -7,12 +7,14 @@ Created on Mon Mar 29 19:02:56 2021
 
 from model import model
 from optimized import optimized
+from policy import policy
 
 # Initialize the Model
 crt = model()
 clc = crt.clc
 cmb = clc.cmb
 lu = clc.lu
+pl = policy()
 
 # Provide the policy map k: numpy.array of shape lu.landuse_shape
 # Array should contains integers. Range of values should be cmb.policy_range
