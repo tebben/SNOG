@@ -110,14 +110,6 @@ k = k[lu.landuse_mask]
 Now that we have the policy map ready, we can calculate the following properties:
 
 ```
-f1 = clc.F1(k) # Objective 1
-f2 = clc.F2(k) # Objective 2
-g1 = clc.G1(k) # Constraint 1
-g2 = clc.G2(k) # Constraint 2
-g3 = clc.G3(k) # Constraint 3
-g4 = clc.G4(k) # Constraint 4
-g5 = clc.G5(k) # Constraint 5
-g6 = clc.G6(k) # Constraint 6
 climate_stress_control = clc.CLIMATE_STRESS_CONTROL(k)
 nexus_resilience = clc.NEXUS_RESILIENCE(k)
 social_ecological_integrity = clc.SOCIAL_ECOLOGICAL_INTEGRITY(k)
@@ -132,6 +124,15 @@ The result is a pandas.DataFrame. The index are the landuse types and the column
 ```
 compatibility_metrix = cmb.compat_df
 ```
+
+Some policies can be combined. To see what combinations of pilicies are possible, the following method can be called.
+
+The result is a Dictionary. The keys are Combined policy codes, and values are Base policy codes involved in the combination.
+
+```
+combinations = cmb.combination
+```
+
 
 **Contact**
 
