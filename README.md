@@ -150,12 +150,14 @@ Eindhoven, The Netherlands
 ### Endpoints
 Swagger documentation for the endpoints can be viewed by navigating to the root of the service. The services does not contain authentication/authorization, this can be done within your own setup with something like traefik.
 
-### properties
-The properties endpoint can be used to get.
+### model
+The model endpoint can be used to get.
 
 | Endpoints |  Operation  | Description |
 | ------------- |:-------------| :-----|
-| /schema/{id} | GET | Get a schema by id |
+| /model/ | GET | Get all available models |
+| /model/{id} | GET | Get properties of a model by given model_id |
+| /model/{id}/properties | POST | Calculate the properties for the given input on a model |
 
 ### Settings
 The SNOG REST API can be configured using the following environment variables.
