@@ -11,7 +11,7 @@ Through the model, decision-makers are provided with choices of adjustable techn
 
 The model is developed based on a modified version of Non-dominated Sortng Genetic Algorith-II (NSGA-II) using [Pymoo](https://pymoo.org/index.html).
 
-**Calculating propeties for a given policy map**
+**Calculating properties for a given policy map**
 
 The model can accomodate any land use, train the optimized policy map, and calculate relevant properties. But our aim here is to show how the default land use (i.e., case study of this research) can be loaded and the pproperties can be calculated.
 
@@ -143,3 +143,55 @@ Maryam Ghodsvali (m.ghodsvali [at] tue.nl)
 Eindhoven University of Technology
 Built Environment Department
 Eindhoven, The Netherlands
+
+
+## SNOG REST API
+
+### Endpoints
+Swagger documentation for the endpoints can be viewed by navigating to the root of the service. The services does not contain authentication/authorization, this can be done within your own setup with something like traefik.
+
+### properties
+The properties endpoint can be used to get.
+
+| Endpoints |  Operation  | Description |
+| ------------- |:-------------| :-----|
+| /schema/{id} | GET | Get a schema by id |
+
+### Settings
+The SNOG REST API can be configured using the following environment variables.
+
+| Variable | Description | default  |
+| ------------- |:-------------| :-----|
+| SNOG_HOSTNAME | Hostname to run the service on | localhost |
+| SNOG_PORT | Port to run the service on | 5000 |
+| SNOG_TITLE | Title of the service, shown in swagger | SNOG API |
+| SNOG_DESCRIPTION | Description of the service, shown in swagger | Spatial Multi-objective Optimization of Food-Water-Energy Nexus |
+| SNOG_ENDPOINT_PREFIX | Prefix of the endpoint, for example /api | - |
+| SNOG_DEFAULT_CORS | Enable the default CORS, accepting everything | False |
+| SNOG_LOG_LEVEL | Set the log level: CRITICAL, ERROR, WARNING, INFO, DEBUG | INFO |
+
+### Run SNOG REST API in develop/debug mode
+To run the service in debug mode using the build-in flask development server.
+```
+python app.py
+```
+
+### Run SNOG REST API using waitress
+An example how to start the service using waitress.
+```
+waitress-serve --listen="*:8080" --call "rest.manage:create_app"
+```
+
+### Docker
+
+Build example
+```
+docker build -t snog-rest-api .
+```
+
+Run example for snog-rest-api with logging set to DEBUG.
+```
+docker run -p 8080:5000 -v C:\temp:/storage -e SNOG_LOG_LEVEL=DEBUG snog-rest-api
+```
+
+The REST service should now be accesible on ```localhost:8080```
