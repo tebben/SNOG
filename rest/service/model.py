@@ -4,7 +4,7 @@ from model_repository import ModelRepository
 from rest.exceptions import InvalidGrid, ModelNotFound
 
 class ModelService:
-    """Service for handling all requests to the validation endpoint"""
+    """Service for handling all requests to the model endpoint"""
 
     def __init__(self, modelRepository: ModelRepository):
         self.__repo = modelRepository
