@@ -1,5 +1,6 @@
-python>=3.7
 pymoo==0.4.2.2
 pandas==1.2.3
 numpy==1.19.2
 matplotlib==3.3.4
+openpyxl==3.0.7
+rasterio==1.2.6
