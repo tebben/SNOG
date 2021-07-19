@@ -1,14 +1,15 @@
-FROM python:3-alpine
+FROM python:3.7.1
 
 ENV SNOG_HOSTNAME=localhost
 ENV SNOG_PORT=5000
 
-RUN apk add --update --no-cache g++ gcc libxslt-dev
+RUN python --version
+RUN pip3 install --upgrade pip
+
 COPY requirements.txt /tmp/
-RUN pip install --no-cache-dir -r /tmp/requirements.txt &&\
-    addgroup -g 1000 snoggroup &&\
-    adduser -u 1000 -G snoggroup -h /home/snoguser -D snoguser
-VOLUME /storage
+RUN pip3 install --no-cache-dir -r /tmp/requirements.txt &&\
+    groupadd -g 1000 snoggroup &&\
+    useradd -rm -d /home/snoguser -s /bin/bash -g root -G snoggroup -u 1000 snoguser
 WORKDIR /home/snoguser
 USER snoguser
 COPY . .
