@@ -184,7 +184,7 @@ The SNOG REST API can be configured using the following environment variables.
 ### Run SNOG REST API in develop/debug mode
 To run the service in debug mode using the build-in flask development server.
 ```
-python app.py
+python rest-api.py
 ```
 
 ### Run SNOG REST API using waitress
@@ -202,7 +202,7 @@ docker build -t snog-rest-api .
 
 Run example for snog-rest-api with logging set to DEBUG.
 ```
-docker run -p 8080:5000 -v C:\temp:/storage -e SNOG_LOG_LEVEL=DEBUG snog-rest-api
+docker run -p 8080:5000 -e SNOG_LOG_LEVEL=DEBUG snog-rest-api
 ```
 
 The REST service should now be accesible on ```localhost:8080```

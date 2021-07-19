@@ -4,7 +4,6 @@ from flask_restx import Resource
 
 from rest import app, models
 from rest.controller import modelService
-
 from rest.exceptions import InvalidGrid, ModelNotFound
 
 logger = logging.getLogger(__name__)
@@ -23,14 +22,14 @@ class ModelListController(Resource):
 
 @app.ns_model.route('/<string:model_id>/')
 class ModelController(Resource):
-    """Get the properties of a model"""
+    """Get model info"""
 
-    @app.api.doc(description="Get the properties of a model", responses={
+    @app.api.doc(description="Get model info", responses={
         200: "Ok",
         404: "Model not found"})
-    @app.ns_model.doc(description='Get the properties of a model')
+    @app.ns_model.doc(description='Get model info')
     def get(self, model_id):
-        """Get the properties of a model"""
+        """Get model info"""
         
         try:
             model = modelService.getModelByID(model_id)
@@ -53,7 +52,7 @@ class PropertiesController(Resource):
 
         try:
             result = modelService.calculateProperties(model_name)
-        except ModelNotFound:
-            return "Model '{}' not found".format(model_name), 404
+        except ModelNotFound as err:
+            return "Model '{}' not found".format(model_name), err.statusCode
 
         return result, 200
