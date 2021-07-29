@@ -21,18 +21,24 @@ class ModelService:
         model = modelConfig["model"]
         policy = modelConfig["policy"]
 
-        print(model.clc.lu.landuse_shape)
-
         return {
             "id": id,
-            "gridTopLeft": modelConfig["gridTopLeft"],
-            "gridSize": modelConfig["gridSize"],
-            "landuseMap": model.clc.lu.landuse2d.tolist(),
-            "landuseLegend": model.clc.lu.landuse_dict,
-            "policyShape": model.clc.lu.landuse_shape,
-            "policyRange": list(model.clc.cmb.policy_range),
-            "policyLegend": policy.policy_dict,
-            "policyCharacteristics": json.loads(policy.policy_characteristics.to_json())
+            "grid": {
+                "topLeft": modelConfig["gridTopLeft"],
+                "size": modelConfig["gridSize"]
+            },
+            "landuse": {
+                "map": model.clc.lu.landuse2d.tolist(),
+                "legend": model.clc.lu.landuse_dict
+            },
+            "policy": {
+                "shape": model.clc.lu.landuse_shape,
+                "range": list(model.clc.cmb.policy_range),
+                "combinations": model.clc.cmb.combination,
+                "compatibility": json.loads(model.clc.cmb.compat_df.to_json()),
+                "legend": policy.policy_dict,
+                "characteristics": json.loads(policy.policy_characteristics.to_json())
+            }
         }
 
     def calculateProperties(self, id: str):
