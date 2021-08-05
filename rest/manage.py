@@ -15,7 +15,7 @@ def create_app():
     """Setup and return the flask app"""
 
     app = Flask(__name__)
-    app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1, x_port=1, x_prefix=1)
     app.register_blueprint(snog.apiBlueprint, url_prefix=snog.settings.endpointPrefix)
     app.config["ERROR_404_HELP"] = False
 
