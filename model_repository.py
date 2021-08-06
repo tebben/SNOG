@@ -6,8 +6,7 @@ class ModelRepository():
 
     def __init__(self):
         self.models = {}
-
-        self.addModel("bsd", [168608.1590000018, 386901.9517999999], 100, model(), optimized().read(), policy())
+        self.addModel("bsd", [5.58305612431902, 51.471012155928], 100, model(), optimized().read(), policy())
 
     def addModel(self, id, topLeft, gridSize, model, optimized, policy):
         self.models[id] = {
