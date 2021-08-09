@@ -1,6 +1,6 @@
 import logging
 
-from flask_restx import Resource
+from flask_restx import Resource, reqparse, fields
 
 from rest import app, models
 from rest.controller import modelService
@@ -38,6 +38,9 @@ class ModelController(Resource):
 
         return model, 200
 
+parser = reqparse.RequestParser()
+parser.add_argument('grid', location='json', type=list)
+
 @app.ns_model.route('/<string:model_name>/properties/')
 class PropertiesController(Resource):
     """Get properties for a given model"""
@@ -51,7 +54,9 @@ class PropertiesController(Resource):
         """Get properties for a model"""
 
         try:
-            result = modelService.calculateProperties(model_name)
+            args = parser.parse_args()
+            grid = args['grid']
+            result = modelService.calculateProperties(model_name, grid)
         except ModelNotFound as err:
             return "Model '{}' not found".format(model_name), err.statusCode
 
