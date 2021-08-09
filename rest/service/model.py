@@ -1,5 +1,7 @@
 import json
+import numpy as np
 
+from optimized import optimized
 from model_repository import ModelRepository
 from rest.exceptions import InvalidGrid, ModelNotFound
 
@@ -19,13 +21,15 @@ class ModelService:
             raise ModelNotFound()
 
         model = modelConfig["model"]
+        optimized = modelConfig["optimized"]
         policy = modelConfig["policy"]
 
         return {
             "id": id,
             "grid": {
                 "topLeft": modelConfig["gridTopLeft"],
-                "size": modelConfig["gridSize"]
+                "size": modelConfig["gridSize"],
+                "optimized": optimized.tolist()
             },
             "landuse": {
                 "map": model.clc.lu.landuse2d.tolist(),
@@ -41,7 +45,7 @@ class ModelService:
             }
         }
 
-    def calculateProperties(self, id: str):
+    def calculateProperties(self, id: str, grid):
         """Calculate properties for a given model and grid policies
         Args:
             model (str): Name of the model
@@ -56,12 +60,14 @@ class ModelService:
             raise ModelNotFound()
 
         model = modelConfig["model"]
-        optimized = modelConfig["optimized"]
-        # Until now, k is a 2-dimensional array, but in order to use it,
-        # we need to filter out the -1 values and make it 1-dimensional
-        k = optimized[model.clc.lu.landuse_mask]
+        #optimized = modelConfig["optimized"]
+        #k = optimized[model.clc.lu.landuse_mask]
 
-        # Now that we have the policy map ready, we can calculate the following properties
+        # 2d list to numpy, flatten and remove -1 values
+        policyGrid = np.array(grid)
+        k = policyGrid[model.clc.lu.landuse_mask]
+
+        # calculate
         climate_stress_control = model.clc.CLIMATE_STRESS_CONTROL(k) # higher value, better climate stress control
         nexus_resilience = model.clc.NEXUS_RESILIENCE(k) # higher value, better nexus resilience
         social_ecological_integrity = model.clc.SOCIAL_ECOLOGICAL_INTEGRITY(k) # higher value, betteer social-ecological integrity

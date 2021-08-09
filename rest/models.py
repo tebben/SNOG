@@ -6,5 +6,5 @@ model_list = app.api.model('ModelList', {
 })
 
 properties_get = app.api.model('PropertiesGet', {
-    "name": fields.String(required=False, description="Name of the model")
+    "grid": fields.List(fields.List(fields.Integer), required=True, desctiption="List of available models", ),
 })
