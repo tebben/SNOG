@@ -11,6 +11,7 @@ import numpy as np
 from landuse import landuse_creator
 from configs import model_vars as v
 from comb import combination as combination_obj
+from objs import supply_demand_balance
 from itertools import product
 
 class consts_objs:
@@ -26,6 +27,7 @@ class consts_objs:
         self.alpha_vec()
         self.climate_vec()
         self.translation()
+        self.supply_demand_balance = supply_demand_balance
         self.normalize(norm) # read normalized values or perform normalization
     
     def normalize(self, norm):

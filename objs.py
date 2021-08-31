@@ -58,3 +58,27 @@ def climate_stress_control():
         11: 0
         }
     return climate_dict
+
+def supply_demand_balance(sd):
+    valid = range(1,11)
+    if not all(x in sd.keys() for x in valid):
+        raise ValueError(f'Key values should contain {list(valid)}')
+    sdd = {
+        1: (25*100*sd[1]*10000)/(v.vegetable_demand*v.population),
+        2: (0.023*12*100*sd[2]*10000)/(0.101*v.population*365),
+        3: (25*100*sd[1]*10000)/(v.vegetable_demand*v.population),
+        4: (1*0.09*100*sd[4]*10000)/(v.water_demand),
+        5: (0.817*100*sd[5]*10000)/(v.water_demand),
+        6: ((0.115 + 0.442 + 1.69)*0.0013*0.9*100*365*sd[6]*10000)/(v.water_demand*3),
+        7: (300*100*sd[7]*10000)/(v.electricity_demand),
+        8: (150*100*sd[8]*10000)/(v.electricity_demand),
+        9: (0.09*365*24*100*sd[9]*10000)/(v.electricity_demand),
+        10: (0.014*365*24*100*sd[10]*10000)/(v.electricity_demand),
+        }
+    food = sdd[1] + sdd[2] + sdd[3]
+    water = sdd[4] + sdd[5] + sdd[6]
+    energy = sdd[7] + sdd[8] + sdd[9] + sdd[10]
+    food = 100 if food > 100 else round(food)
+    water = 100 if water > 100 else round(water)
+    energy = 100 if energy > 100 else round(energy)
+    return food, water, energy

@@ -67,5 +67,9 @@ compatibility_metrix = cmb.compat_df
 # Combinations - Dictionary
 combinations = cmb.combination
 
-
-
+# Calculate food, water, and energy supply demand balance
+# sd is a dictionary - keys are the policy numbers from 1 to 10 and
+# values are number of cells that each policy is assigned to.
+# E.g., having one cell assigned to each policy:
+sd = {k:1 for k in range(1,11)}
+food, water, energy = clc.supply_demand_balance(sd)

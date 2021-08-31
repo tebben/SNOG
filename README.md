@@ -115,6 +115,15 @@ nexus_resilience = clc.NEXUS_RESILIENCE(k)
 social_ecological_integrity = clc.SOCIAL_ECOLOGICAL_INTEGRITY(k)
 ```
 
+To calculate supply demand balance in percentage for food, water, and energy, a dictionary "sd" with the following properties is needed:
+keys are the policy number from 1 to 10 (int) - values are number of cells that each policy is assigned to (int).
+E.g., having one cell assigned to each policy:
+
+```
+sd = {k:1 for k in range(1,11)}
+food, water, energy = clc.supply_demand_balance(sd)
+```
+
 **Invalid user policy choice**
 
 Some policies are not compatible with some types of landuse. To see what are the compatible policies for each landuse, the following method can be called.
