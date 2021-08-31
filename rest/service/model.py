@@ -21,7 +21,7 @@ class ModelService:
             raise ModelNotFound()
 
         model = modelConfig["model"]
-        optimized = modelConfig["optimized"]
+        optimized = modelConfig["optimizedPolicyGrid"]
         policy = modelConfig["policy"]
 
         return {
@@ -29,7 +29,12 @@ class ModelService:
             "grid": {
                 "topLeft": modelConfig["gridTopLeft"],
                 "size": modelConfig["gridSize"],
-                "optimized": optimized.tolist()
+            },
+            "optimized": {
+                "policyGrid": optimized.tolist(),
+                "climateStressControl": modelConfig["optimizedClimateStressControl"],
+                "nexusResilience": modelConfig["optimizedNexusResilience"],
+                "ecologicalIntegrity": modelConfig["optimizedSocialEcologicalIntegrity"],
             },
             "landuse": {
                 "map": model.clc.lu.landuse2d.tolist(),
