@@ -28,7 +28,7 @@ class ModelService:
             "id": id,
             "grid": {
                 "topLeft": modelConfig["gridTopLeft"],
-                "size": modelConfig["gridSize"],
+                "size": modelConfig["vars"].grid_lenght,
             },
             "optimized": {
                 "policyGrid": optimized.tolist(),
@@ -47,6 +47,12 @@ class ModelService:
                 "compatibility": json.loads(model.clc.cmb.compat_df.to_json()),
                 "legend": policy.policy_dict,
                 "characteristics": json.loads(policy.policy_characteristics.to_json())
+            },
+            "demand": {
+                "population": modelConfig["vars"].population,
+                "food": modelConfig["vars"].vegetable_demand,
+                "water": modelConfig["vars"].water_demand,
+                "energy": modelConfig["vars"].electricity_demand
             }
         }
 
