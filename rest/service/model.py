@@ -31,6 +31,7 @@ class ModelService:
                 "size": modelConfig["vars"].grid_lenght,
             },
             "optimized": {
+                "planning": modelConfig["optimizedPlanning"],
                 "policyGrid": optimized.tolist(),
                 "climateStressControl": modelConfig["optimizedClimateStressControl"],
                 "nexusResilience": modelConfig["optimizedNexusResilience"],
