@@ -8,7 +8,7 @@ class ModelRepository():
 
     def __init__(self):
         self.models = {}
-        self.addModel("bsd", [5.58233839, 51.47146286], model(), optimized().read(), {"1": 2, "2": 2, "3": 2, "4": 2, "5": 35, "6": 24, "7": 14, "8": 32, "9": 2, "10": 1 }, policy(), v)
+        self.addModel("bsd", [5.58233839, 51.47146286], model(), optimized().read(), {"1": 1, "2": 1, "3": 1, "4": 1, "5": 34, "6": 23, "7": 13, "8": 31, "9": 1, "10": 0 }, policy(), v)
 
     def addModel(self, id, topLeft, model, optimized, optimizedPlanning, policy, vars):
         policyGrid = np.array(optimized)
