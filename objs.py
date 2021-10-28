@@ -64,15 +64,15 @@ def supply_demand_balance(sd):
     if not all(x in sd.keys() for x in valid):
         raise ValueError(f'Key values should contain {list(valid)}')
     sdd = {
-        1: (25*100*sd[1]*10000)/(v.vegetable_demand*v.population),
-        2: (0.023*12*100*sd[2]*10000)/(0.101*v.population*365),
-        3: (25*100*sd[1]*10000)/(v.vegetable_demand*v.population),
-        4: (1*0.09*100*sd[4]*10000)/(v.water_demand),
+        1: (25*0.07*100*sd[1]*10000)/(v.vegetable_demand*v.population),
+        2: (0.02316*12*100*sd[2]*10000)/(0.101*v.population*365),
+        3: (25*0.07*100*sd[3]*10000)/(v.vegetable_demand*v.population),
+        4: (1*0.09*0.763*100*sd[4]*10000)/(v.water_demand),
         5: (0.817*100*sd[5]*10000)/(v.water_demand),
-        6: ((0.115 + 0.442 + 1.69)*0.0013*0.9*100*365*sd[6]*10000)/(v.water_demand*3),
-        7: (300*100*sd[7]*10000)/(v.electricity_demand),
+        6: (((0.115 + 0.442 + 1.69)/3)*0.0013*0.9*100*365*sd[6]*10000)/(v.water_demand),
+        7: (300*0.92*100*sd[7]*10000)/(v.electricity_demand),
         8: (150*100*sd[8]*10000)/(v.electricity_demand),
-        9: (0.09*365*24*100*sd[9]*10000)/(v.electricity_demand),
+        9: (0.09*92*8*100*sd[9]*10000)/(v.electricity_demand),
         10: (0.014*365*24*100*sd[10]*10000)/(v.electricity_demand),
         }
     food = sdd[1] + sdd[2] + sdd[3]
