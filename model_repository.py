@@ -14,9 +14,6 @@ class ModelRepository():
         policyGrid = np.array(optimized)
         k = policyGrid[model.clc.lu.landuse_mask]
 
-        print("hola")
-        print(vars.grid_lenght)
-
         self.models[id] = {
             "gridTopLeft": topLeft,
             "model": model,
