@@ -64,9 +64,9 @@ def supply_demand_balance(sd):
     if not all(x in sd.keys() for x in valid):
         raise ValueError(f'Key values should contain {list(valid)}')
     sdd = {
-        1: (25*0.07*100*sd[1]*10000)/(v.vegetable_demand*v.population),
+        1: (25*0.07*100*sd[1]*10000)/(v.vegetable_demand),
         2: (0.02316*12*100*sd[2]*10000)/(0.101*v.population*365),
-        3: (25*0.07*100*sd[3]*10000)/(v.vegetable_demand*v.population),
+        3: (25*0.07*100*sd[3]*10000)/(v.vegetable_demand),
         4: (1*0.09*0.763*100*sd[4]*10000)/(v.water_demand),
         5: (0.817*100*sd[5]*10000)/(v.water_demand),
         6: (((0.115 + 0.442 + 1.69)/3)*0.0013*0.9*100*365*sd[6]*10000)/(v.water_demand),
