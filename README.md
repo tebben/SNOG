@@ -146,9 +146,4 @@ combinations = cmb.combination
 **Contact**
 
 Feel free to contact me if you have any question:
-
-Maryam Ghodsvali (m.ghodsvali [at] tue.nl)
-
-Eindhoven University of Technology
-Built Environment Department
-Eindhoven, The Netherlands
+Maryam Ghodsvali (m.ghodsevali [at] gmail.com)
